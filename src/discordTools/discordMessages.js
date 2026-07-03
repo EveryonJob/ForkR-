@@ -29,6 +29,9 @@ const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
 const Scrape = require('../util/scrape.js');
 
+const DECAY_NOTIFICATION_CHANNEL_ID = '1442231973782360213';
+const DECAY_NOTIFICATION_ROLE_ID = '1442271607522459778';
+
 module.exports = {
     sendMessage: async function (guildId, content, messageId, channelId, interaction = null) {
         if (interaction) {
@@ -207,10 +210,10 @@ module.exports = {
             embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
-            content: entity.everyone ? '@everyone' : ''
+            content: entity.everyone ? `<@&${DECAY_NOTIFICATION_ROLE_ID}>` : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, DECAY_NOTIFICATION_CHANNEL_ID);
     },
 
     sendStorageMonitorDisconnectNotificationMessage: async function (guildId, serverId, entityId) {

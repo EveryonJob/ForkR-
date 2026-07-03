@@ -86,7 +86,14 @@ module.exports = {
 
 				const entity = instance.serverList[device.serverId].alarms[entityId];
 
-				if (image !== null) instance.serverList[device.serverId].alarms[entityId].image = `${image}.png`;
+				if (entity === null || entity === undefined) {
+					const str = client.intlGet(guildId, 'invalidId', { id: entityId });
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+					client.log(client.intlGet(null, 'warningCap'), str);
+					return;
+				}
+
+				if (image !== null) entity.image = `${image}.png`;
 				client.setInstance(guildId, instance);
 
 				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
