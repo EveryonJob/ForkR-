@@ -21,6 +21,7 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
+const Constants = require('../util/constants.js');
 const PollingHandler = require('../handlers/pollingHandler.js');
 
 module.exports = {
@@ -108,6 +109,10 @@ module.exports = {
         await PollingHandler.pollingHandler(rustplus, client);
         rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
         rustplus.isOperational = true;
+
+        const startupMessageDiscord = client.intlGet(guildId, 'botStartedDiscord');
+        await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, Constants.COLOR_ACTIVE, startupMessageDiscord, null, client.intlGet(guildId, 'rustplusOperational'));
+        await rustplus.sendInGameMessage(client.intlGet(guildId, 'botStartedInGame'));
 
         rustplus.updateLeaderRustPlusLiteInstance();
     },

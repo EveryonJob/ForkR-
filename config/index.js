@@ -18,6 +18,8 @@
 
 */
 
+require('dotenv').config();
+
 module.exports = {
     general: {
         language: process.env.RPP_LANGUAGE || 'en',
