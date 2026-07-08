@@ -365,6 +365,25 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
+    sendTeamActivityNotificationMessage: async function (guildId, serverId, color, text, steamId, title = null, everyone = false) {
+        const instance = Client.client.getInstance(guildId);
+
+        let png = null;
+        if (steamId !== null) {
+            png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
+        }
+        const content = {
+            embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png, title)]
+        }
+
+        if (everyone) {
+            content.content = '@everyone';
+        }
+
+        const channelId = instance.channelId.teamActivity || instance.channelId.activity;
+        await module.exports.sendMessage(guildId, content, null, channelId);
+    },
+
     sendTeamChatMessage: async function (guildId, message) {
         const instance = Client.client.getInstance(guildId);
 

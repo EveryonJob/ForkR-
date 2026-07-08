@@ -1,4 +1,4 @@
-{
+﻿{
     "24HoursInGameTimePassed": "24 Successful hours in-game time have passed.",
     "abandonedCabins": "Abandoned Cabins",
     "abandonedMilitaryBase": "Abandoned Military Base",
@@ -92,6 +92,7 @@
     "channelNameSwitchGroups": "switchGroups",
     "channelNameSwitches": "switches",
     "channelNameTeamchat": "teamchat",
+    "channelNameTeamActivity": "teamActivity",
     "channelNameTrackers": "trackers",
     "chinook47": "Chinook 47",
     "chinook47DetectedSetting": "When a Chinook 47 enters the map, send a notification.",
@@ -466,7 +467,7 @@
     "mapWipeDetectedNotifySetting": "When Map Wipe is detected, should {group} be notified?",
     "markerAdded": "Marker {name} at [{location}] was added.",
     "markerDoesNotExist": "Marker {name} does not exist.",
-    "markerLocation": "Marker {name} at [{location}] is {distance}m from {player} in direction {direction}°.",
+    "markerLocation": "Marker {name} at [{location}] is {distance}m from {player} in direction {direction}В°.",
     "markerRemoved": "Marker {name} at [{location}] was removed.",
     "message": "Message",
     "messageCap": "MESSAGE",
@@ -574,7 +575,7 @@
     "populationQueue": "{number} players in queue.",
     "powerPlant": "Power Plant",
     "profile": "Profile",
-    "proxLocation": "{name} is {distance}m from {caller} in direction {direction}° [{location}]",
+    "proxLocation": "{name} is {distance}m from {caller} in direction {direction}В° [{location}]",
     "quantity": "Quantity",
     "questionMark": "Question Mark",
     "ranch": "Ranch",
@@ -788,3 +789,5 @@
     "youAreAlreadyLeader": "You are already leader.",
     "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
 }
+
+
