@@ -265,10 +265,10 @@ module.exports = {
             embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
-            content: entity.everyone ? '@everyone' : ''
+            content: entity.everyone ? `<@&${DECAY_NOTIFICATION_ROLE_ID}>` : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, DECAY_NOTIFICATION_CHANNEL_ID);
     },
 
     sendSmartAlarmTriggerMessage: async function (guildId, serverId, entityId) {
@@ -279,10 +279,10 @@ module.exports = {
             embeds: [await DiscordEmbeds.getAlarmEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
-            content: entity.everyone ? '@everyone' : ''
+            content: entity.everyone ? `<@&${DECAY_NOTIFICATION_ROLE_ID}>` : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, DECAY_NOTIFICATION_CHANNEL_ID);
     },
 
     sendServerChangeStateMessage: async function (guildId, serverId, state) {
