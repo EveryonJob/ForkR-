@@ -108,6 +108,15 @@ module.exports = {
 
         await PollingHandler.pollingHandler(rustplus, client);
         rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
+        rustplus.hourlyOnlineNotificationTaskId = setInterval(() => {
+            const onlinePlayers = rustplus.info && Number.isFinite(rustplus.info.players) ? rustplus.info.players : 0;
+            const maxPlayers = rustplus.info && Number.isFinite(rustplus.info.maxPlayers) ? rustplus.info.maxPlayers : 0;
+            const message = client.intlGet(guildId, 'hourlyOnlinePlayers', {
+                online: onlinePlayers,
+                max: maxPlayers
+            });
+            rustplus.sendInGameMessage(message);
+        }, 60 * 60 * 1000);
         rustplus.isOperational = true;
 
         const startupMessageDiscord = client.intlGet(guildId, 'botStartedDiscord');

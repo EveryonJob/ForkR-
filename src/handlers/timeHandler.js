@@ -24,6 +24,7 @@ module.exports = {
     handler: function (rustplus, client, time) {
         /* Check time changes */
         module.exports.checkChanges(rustplus, client, time);
+        module.exports.checkSunriseSunsetNotifications(rustplus, client, time);
     },
 
     checkChanges: function (rustplus, client, time) {
@@ -128,6 +129,27 @@ module.exports = {
             }
 
             rustplus.time.timeTillDay[newTime] = 0;
+        }
+    },
+
+    checkSunriseSunsetNotifications: function (rustplus, client, time) {
+        if (!rustplus.time || !rustplus.time.time) return;
+
+        const prevTime = rustplus.time.time;
+        const newTime = time.time;
+
+        if (prevTime === newTime) return;
+
+        const lastNotifiedTime = rustplus.lastSunriseSunsetNotificationTime;
+        if (lastNotifiedTime === undefined || lastNotifiedTime !== newTime) {
+            if (newTime === 4) {
+                rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'timeNotifySunrise'));
+                rustplus.lastSunriseSunsetNotificationTime = newTime;
+            }
+            else if (newTime === 16) {
+                rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'timeNotifySunset'));
+                rustplus.lastSunriseSunsetNotificationTime = newTime;
+            }
         }
     }
 }
