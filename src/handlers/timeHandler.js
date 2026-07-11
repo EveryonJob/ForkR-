@@ -138,18 +138,16 @@ module.exports = {
         const prevTime = rustplus.time.time;
         const newTime = time.time;
 
-        if (prevTime === newTime) return;
+        const prevHour = Math.floor(prevTime);
+        const newHour = Math.floor(newTime);
 
-        const lastNotifiedTime = rustplus.lastSunriseSunsetNotificationTime;
-        if (lastNotifiedTime === undefined || lastNotifiedTime !== newTime) {
-            if (newTime === 4) {
-                rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'timeNotifySunrise'));
-                rustplus.lastSunriseSunsetNotificationTime = newTime;
-            }
-            else if (newTime === 16) {
-                rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'timeNotifySunset'));
-                rustplus.lastSunriseSunsetNotificationTime = newTime;
-            }
+        if (prevHour === newHour) return;
+
+        if (newHour === 4) {
+            rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'timeNotifySunrise'));
+        }
+        else if (newHour === 16) {
+            rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'timeNotifySunset'));
         }
     }
 }
