@@ -133,10 +133,12 @@ module.exports = {
     },
 
     checkSunriseSunsetNotifications: function (rustplus, client, time) {
-        if (!rustplus.time || !rustplus.time.time) return;
+        if (!rustplus.time || !time || typeof time.time === 'undefined') return;
 
-        const prevTime = rustplus.time.time;
-        const newTime = time.time;
+        const prevTime = Number(rustplus.time.time);
+        const newTime = Number(time.time);
+
+        if (!Number.isFinite(prevTime) || !Number.isFinite(newTime)) return;
 
         const prevHour = Math.floor(prevTime);
         const newHour = Math.floor(newTime);

@@ -108,15 +108,35 @@ module.exports = {
 
         await PollingHandler.pollingHandler(rustplus, client);
         rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
-        rustplus.hourlyOnlineNotificationTaskId = setInterval(() => {
-            const onlinePlayers = rustplus.info && Number.isFinite(rustplus.info.players) ? rustplus.info.players : 0;
-            const maxPlayers = rustplus.info && Number.isFinite(rustplus.info.maxPlayers) ? rustplus.info.maxPlayers : 0;
-            const message = client.intlGet(guildId, 'hourlyOnlinePlayers', {
-                online: onlinePlayers,
-                max: maxPlayers
-            });
-            rustplus.sendInGameMessage(message);
-        }, 60 * 60 * 1000);
+        // Schedule announcements to run exactly at the top of each real hour (HH:00)
+        function sendHourlyAnnouncements() {
+            try {
+                const now = new Date();
+                const pad = (n) => (n < 10 ? `0${n}` : `${n}`);
+                const realTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+                const onlinePlayers = rustplus.info && Number.isFinite(rustplus.info.players) ? rustplus.info.players : 0;
+                const maxPlayers = rustplus.info && Number.isFinite(rustplus.info.maxPlayers) ? rustplus.info.maxPlayers : 0;
+                const onlineMessage = `${realTime} ${client.intlGet(guildId, 'hourlyOnlinePlayers', { online: onlinePlayers, max: maxPlayers })}`;
+                rustplus.sendInGameMessage(onlineMessage);
+
+                // Send server (game) time as a separate message
+                const serverTimeMessage = rustplus.getCommandTime();
+                if (serverTimeMessage) rustplus.sendInGameMessage(serverTimeMessage);
+            }
+            catch (e) {
+                rustplus.log(client.intlGet(null, 'errorCap'), `HourlyAnnouncements error: ${e}`, 'error');
+            }
+        }
+
+        // Calculate ms until next top-of-hour
+        const now = new Date();
+        const msUntilNextHour = ((60 - now.getMinutes()) * 60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+        // Fire first at next top-of-hour, then every hour
+        rustplus.hourlyAlignedTimeoutId = setTimeout(() => {
+            sendHourlyAnnouncements();
+            rustplus.hourlyAlignedIntervalId = setInterval(sendHourlyAnnouncements, 60 * 60 * 1000);
+        }, msUntilNextHour);
         rustplus.isOperational = true;
 
         const startupMessageDiscord = client.intlGet(guildId, 'botStartedDiscord');

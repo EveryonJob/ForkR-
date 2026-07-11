@@ -47,7 +47,11 @@ module.exports = {
         /* Stop current tasks */
         clearInterval(rustplus.pollingTaskId);
         clearInterval(rustplus.tokensReplenishTaskId);
-        clearInterval(rustplus.hourlyOnlineNotificationTaskId);
+        // clear legacy hourly task if present
+        try { clearInterval(rustplus.hourlyOnlineNotificationTaskId); } catch (e) { }
+        // clear aligned hourly scheduler
+        try { clearTimeout(rustplus.hourlyAlignedTimeoutId); } catch (e) { }
+        try { clearInterval(rustplus.hourlyAlignedIntervalId); } catch (e) { }
         clearTimeout(rustplus.inGameChatTimeout);
 
         /* Reset map markers, timers & arrays */
